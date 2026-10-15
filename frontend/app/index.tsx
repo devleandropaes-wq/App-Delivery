@@ -171,16 +171,6 @@ export default function Home() {
             </View>
           )}
           contentContainerStyle={{ paddingBottom: insets.bottom + 120 }}
-          ListFooterComponent={
-            <Pressable
-              testID="admin-access-link"
-              style={styles.adminLink}
-              onPress={() => router.push("/admin")}
-            >
-              <Ionicons name="lock-closed-outline" size={14} color={colors.muted} />
-              <Text style={styles.adminLinkText}>Área restrita da farmácia</Text>
-            </Pressable>
-          }
           refreshControl={
             <RefreshControl
               refreshing={products.isRefetching}
@@ -363,20 +353,6 @@ const useStyles = makeStyles((colors) => ({
     alignItems: "center",
     gap: 10,
     padding: 40,
-  },
-  adminLink: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 6,
-    height: 48,
-    marginTop: 16,
-  },
-  adminLinkText: {
-    color: colors.muted,
-    fontSize: 13,
-    fontFamily: FONTS.semiBold,
-    textDecorationLine: "underline",
   },
   stateText: {
     color: colors.onSurfaceTertiary,
