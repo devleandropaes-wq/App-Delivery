@@ -1,0 +1,41 @@
+{
+  "summary": "Full backend + frontend testing for A Sua Drogaria delivery app. 25/25 pytest cases passed covering config, products (list/filter/search/detail), orders (sequential codes starting at 1001, stock decrement, 409 insufficient stock, invalid payment, phone masking), admin login (correct/wrong), admin orders (list/status advance/invalid status), admin product CRUD (including promo_price=null via PUT), webhook (array pt, object wrapper en, bad payload), import (CSV ';' and ',' and XLSX, update-by-barcode), and file 404. Frontend mobile viewport flows (390x844) verified end-to-end: home chips+search+add-to-cart → cart-fab → /carrinho with checkout-field-* + payment-pix + checkout-submit → /pedido/<code> showing pix-info-card and pix-key-text. Admin flow (/admin): login error state visible on wrong password, successful login routes to /admin/pedidos with all 4 Kanban columns (pendente, em_separacao, saiu_entrega, finalizado), order-card-<code> opens detail modal with order-advance-button that moves status to next column, /admin/estoque shows estoque-new-product (opens form with product-form-name/price/promo/stock + product-save-button) and estoque-import-button and estoque-row-<id> rows. No React Native deprecated packages detected; no SafeAreaView issues; no red screens. Minor non-blocking console warning: deprecated 'shadow*' style props (RN Web).",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [],
+    "react_native_issues": [
+      {"component": "StyleSheet shadow* props", "issue": "Console warning: '\"shadow*\" style props are deprecated. Use \"boxShadow\".' Replace shadowColor/shadowOffset/shadowOpacity/shadowRadius with boxShadow for web parity, or wrap with Platform.select. Non-blocking."}
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_asua_drogaria.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [
+    "(Optional) Replace deprecated shadow* style props with boxShadow to silence web console warning.",
+    "(Code hygiene) /app/backend/server.py is 807 lines — consider splitting into routers (products, orders, admin, webhook, upload) and services (importer, storage) modules for maintainability.",
+    "(Minor) In server.admin_update_product the loop uses 'is not None' which means setting active=false via PUT works, but any field explicitly set to null other than promo_price is silently ignored — document this behavior if intentional."
+  ],
+  "critical_code_review_comments": [
+    "server.py exceeds 700 LOC guideline (807 lines) — recommend modularization.",
+    "Stock decrement is correctly race-aware via conditional update_one with {stock:{$gte:qty}} and $inc — good pattern.",
+    "ObjectId exclusion handled via Pydantic alias + BeforeValidator — responses properly return 'id' not '_id'. Verified in tests.",
+    "Phone masking (_mask_phone) correctly applied on public GET /orders/{code} — verified.",
+    "Admin JWT HS256 with 30d exp; 401 on missing/invalid/expired tokens — verified.",
+    "Soft delete on products uses active=false and public /products filters active:{$ne:false} — verified via test (404 after delete)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/__init__.py (created)",
+    "/app/backend/tests/test_asua_drogaria.py (created, 25 tests)"
+  ],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "seed_data_creation": "Tests created a few TEST_* products (via admin create, CSV & XLSX import, webhook) and several TEST customer orders (codes starting ~1001). Soft-deleted TEST product in CRUD flow. Seeded demo catalog (20 products) remained; still enough stock after order tests.",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Backend URL from frontend/.env EXPO_PUBLIC_BACKEND_URL. Admin password 'drogaria2026'. Pytest file: /app/backend/tests/test_asua_drogaria.py. Tests are idempotent (TEST_* barcodes/names) and safe to rerun. Note that each run creates ~3-4 new orders and increments sequential order code counter. Audio alert on admin page cannot be verified headless (per request)."
+}

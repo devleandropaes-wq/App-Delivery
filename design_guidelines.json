@@ -1,0 +1,160 @@
+{
+  "app_name": "A Sua Drogaria",
+  "personality": "1 iOS-Native Clean",
+  "personality_one_liner": "Plataforma de delivery full-stack limpa, confiável e profissional em Azul Escuro, Vermelho Vivo e Branco para A Sua Drogaria em Duque de Caxias.",
+  "color": {
+    "surface": "#F8FAFC",
+    "onSurface": "#0F172A",
+    "surfaceSecondary": "#FFFFFF",
+    "onSurfaceSecondary": "#1E293B",
+    "surfaceTertiary": "#F1F5F9",
+    "onSurfaceTertiary": "#475569",
+    "surfaceInverse": "#0F172A",
+    "onSurfaceInverse": "#F8FAFC",
+    "brand": "#0B2545",
+    "onBrand": "#FFFFFF",
+    "brandPrimary": "#0B2545",
+    "onBrandPrimary": "#FFFFFF",
+    "brandSecondary": "#D90429",
+    "onBrandSecondary": "#FFFFFF",
+    "brandTertiary": "#E2E8F0",
+    "onBrandTertiary": "#0B2545",
+    "success": "#10B981",
+    "onSuccess": "#FFFFFF",
+    "warning": "#F59E0B",
+    "onWarning": "#FFFFFF",
+    "error": "#D90429",
+    "onError": "#FFFFFF",
+    "info": "#3B82F6",
+    "onInfo": "#FFFFFF",
+    "border": "#E2E8F0",
+    "borderStrong": "#CBD5E1",
+    "divider": "#F1F5F9",
+    "muted": "#64748B"
+  },
+  "typography": {
+    "displayFontFamily": "Plus Jakarta Sans",
+    "textFontFamily": "Plus Jakarta Sans",
+    "scale": {
+      "sm": 12,
+      "base": 14,
+      "lg": 16,
+      "xl": 20,
+      "2xl": 24
+    }
+  },
+  "spacing": {
+    "rule": "Padronizado e generoso com respiro mobile-first, garantindo alinhamento perfeito e alvos de toque maiores que 44x44pt.",
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 24,
+    "2xl": 32,
+    "3xl": 48
+  },
+  "radius_tokens": {
+    "sm": 6,
+    "md": 12,
+    "lg": 20,
+    "pill": 999
+  },
+  "shadow_tier": "1",
+  "navigation": "bottom_tabs",
+  "icon_set": "Ionicons",
+  "glassmorphism": {
+    "enabled": true,
+    "do's": [
+      "Usar glassmorfismo no cabeçalho fixo e na barra de abas flutuante",
+      "Garantir opacidade mínima de 75% para legibilidade perfeita"
+    ],
+    "dont's": [
+      "Aplicar desfoque em campos de formulário ou listas longas de dados densos"
+    ]
+  },
+  "platform_libraries": {
+    "glass": {
+      "ios": "expo-glass-effect",
+      "android": "expo-blur",
+      "low_end_android_fallback": "solid surfaceSecondary"
+    },
+    "image": "expo-image",
+    "blur": "expo-blur",
+    "bottom_sheet": "@gorhom/bottom-sheet",
+    "animation": "react-native-reanimated",
+    "gesture": "react-native-gesture-handler"
+  },
+  "screens": [
+    {
+      "name": "HomeCliente",
+      "purpose": "Página inicial do cliente com vitrine por categorias, barra de busca em Duque de Caxias e carrinho flutuante.",
+      "states": {
+        "loading": "Carregando produtos e ofertas em destaque...",
+        "empty": "Nenhum produto encontrado nesta categoria.",
+        "error": "Não foi possível carregar o catálogo. Verifique sua conexão."
+      },
+      "layout": "Cabeçalho com localização (Duque de Caxias, RJ) e telefone 21 97921-6950, barra de busca, carrossel de banner promocional, chips de categorias horizontais (Medicamentos, Higiene, Cosméticos, Suplementos) e grade responsiva de produtos com preço original e promocional."
+    },
+    {
+      "name": "DetalhesProduto",
+      "purpose": "Exibição detalhada do produto com imagem em alta qualidade, descrição, dosagem/uso e botão de adicionar ao carrinho.",
+      "states": {
+        "loading": "Carregando detalhes do medicamento...",
+        "empty": "Produto indisponível no momento.",
+        "error": "Erro ao carregar detalhes do produto."
+      },
+      "layout": "Imagem em destaque com fundo neutro, título em destaque, preço parcelado/promocional, seletor de quantidade e botão fixo inferior 'Adicionar ao Carrinho'."
+    },
+    {
+      "name": "CarrinhoCheckout",
+      "purpose": "Resumo do pedido e checkout simplificado (Nome, Telefone/WhatsApp, Endereço em Caxias, Pix ou Pagar na Entrega).",
+      "states": {
+        "loading": "Calculando taxa e itens...",
+        "empty": "Seu carrinho está vazio. Adicione itens da vitrine para prosseguir.",
+        "error": "Erro ao atualizar o carrinho."
+      },
+      "layout": "Lista de itens no carrinho, formulário de dados do cliente e entrega em Duque de Caxias, seletor de forma de pagamento (Pix com chave explícita ou Dinheiro/Cartão na Entrega) e botão fixo 'Finalizar Pedido via WhatsApp / Sistema'."
+    },
+    {
+      "name": "AdminLogin",
+      "purpose": "Painel de autenticação seguro protegido por senha para os operadores da farmácia.",
+      "states": {
+        "loading": "Validando credenciais...",
+        "empty": "Insira sua senha de acesso ao painel.",
+        "error": "Senha incorreta. Tente novamente."
+      },
+      "layout": "Centralizado com logotipo da drogaria, campo de senha com ícone de olho, botão de acesso e link de suporte."
+    },
+    {
+      "name": "AdminKanban",
+      "purpose": "Gestão de pedidos em tempo real em formato Kanban (Pendente, Em Separação, Saiu para Entrega, Finalizado) com alerta sonoro.",
+      "states": {
+        "loading": "Carregando pedidos ativos...",
+        "empty": "Nenhum pedido registrado no momento.",
+        "error": "Erro ao sincronizar pedidos em tempo real."
+      },
+      "layout": "Abas/Colunas Kanban horizontais ou em acordeão deslizável para mobile, exibindo cartões de pedidos com nome do cliente, itens resumidos, valor total, endereço em Caxias e botões de mudança de status."
+    },
+    {
+      "name": "AdminEstoque",
+      "purpose": "Módulo de estoque para cadastrar produtos, alterar preços, subir fotos e importar planilha Excel/CSV.",
+      "states": {
+        "loading": "Carregando tabela de estoque...",
+        "empty": "Nenhum produto cadastrado no estoque.",
+        "error": "Erro ao carregar banco de dados de produtos."
+      },
+      "layout": "Lista de produtos com busca rápida, botão de 'Novo Produto', botão em destaque 'Importar Planilha do Sistema (Excel/CSV)' e formulário modal de cadastro/edição."
+    }
+  ],
+  "images": {
+    "hero_pharmacy": {
+      "url": "https://images.unsplash.com/photo-1696861308115-54a5e5a134b0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODl8MHwxfHNlYXJjaHwyfHxwaGFybWFjeSUyMGRlbGl2ZXJ5JTIwc3RvcmUlMjBmcm9udCUyMG1lZGljYWwlMjBwcm9kdWN0cyUyMGNsZWFuJTIwcGFja2FnaW5nfGVufDB8fHx8MTc5MjAzNDE5M3ww&ixlib=rb-4.1.0&q=85",
+      "alt": "A Sua Drogaria prateleiras e produtos organizados"
+    },
+    "store_logo": {
+      "url": "https://images.unsplash.com/photo-1603706580932-6befcf7d8521?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODl8MHwxfHNlYXJjaHwzfHxwaGFybWFjeSUyMGRlbGl2ZXJ5JTIwc3RvcmUlMjBmcm9udCUyMG1lZGljYWwlMjBwcm9kdWN0cyUyMGNsZWFuJTIwcGFja2FnaW5nfGVufDB8fHx8MTc5MjAzNDE5M3ww&ixlib=rb-4.1.0&q=85",
+      "alt": "Logotipo e cruz da drogaria"
+    }
+  },
+  "instructions_to_main_agent": "Implementar aplicativo completo full-stack para 'A Sua Drogaria' em Duque de Caxias, RJ (Tel: 21 97921-6950). Utilizar estritamente as cores Azul Escuro (#0B2545), Vermelho Vivo (#D90429) e Branco (#F8FAFC). Criar tanto a interface do cliente focada em celular com vitrine por categorias, busca, carrinho e checkout simplificado (Pix / Pagar na Entrega), quanto o painel administrativo protegido por senha com Kanban de pedidos em tempo real (com alerta sonoro simulado), gestão de estoque e botão de importação de planilha Excel/CSV. Garantir responsividade perfeita e textos em Português do Brasil."
+}
