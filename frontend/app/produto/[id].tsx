@@ -1,4 +1,3 @@
-import { Ionicons } from "@react-native-vector-icons/ionicons";
 import * as Haptics from "expo-haptics";
 import { Image } from "expo-image";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -32,7 +31,7 @@ export default function ProductDetails() {
   if (product.isLoading) {
     return (
       <View style={[styles.container, styles.center]}>
-        <Ionicons name="sync" size={26} color={colors.brandPrimary} />
+        <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: colors.brandPrimary }} />
         <Text style={styles.stateText}>Carregando detalhes do medicamento...</Text>
       </View>
     );
@@ -41,7 +40,7 @@ export default function ProductDetails() {
   if (product.isError || !product.data) {
     return (
       <View style={[styles.container, styles.center]}>
-        <Ionicons name="cloud-offline-outline" size={26} color={colors.error} />
+        <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: colors.error }} />
         <Text style={styles.stateText}>Erro ao carregar detalhes do produto.</Text>
       </View>
     );
@@ -70,14 +69,20 @@ export default function ProductDetails() {
           onPress={() => (router.canDismiss?.() ? router.back() : router.replace("/"))}
           hitSlop={8}
         >
-          <Ionicons name="chevron-back" size={22} color={colors.onBrandPrimary} />
+          <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: colors.onBrandPrimary }} />
         </Pressable>
         <Text style={styles.headerTitle}>Detalhes do produto</Text>
         <View style={{ width: 36 }} />
       </View>
 
       <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 120 }}>
-        <View style={styles.imageBox}>{image ? <Image source={{ uri: image }} style={styles.image} contentFit="cover" transition={200} /> : <Ionicons name="medkit-outline" size={60} color={colors.brandPrimary} />}</View>
+        <View style={styles.imageBox}>
+          {image ? (
+            <Image source={{ uri: image }} style={styles.image} contentFit="cover" transition={200} />
+          ) : (
+            <View style={{ width: 30, height: 30, borderRadius: 15, backgroundColor: colors.brandPrimary }} />
+          )}
+        </View>
 
         <View style={styles.content}>
           <View style={styles.catPill}>
@@ -111,11 +116,11 @@ export default function ProductDetails() {
       <View style={[styles.footer, { bottom: insets.bottom + 12 }]}>
         <View style={styles.stepper}>
           <Pressable testID="product-qty-minus" style={styles.stepBtn} onPress={() => setQty((q) => Math.max(1, q - 1))}>
-            <Ionicons name="remove" size={18} color={colors.onBrandPrimary} />
+            <View style={{ width: 12, height: 4, borderRadius: 2, backgroundColor: colors.onBrandPrimary }} />
           </Pressable>
           <Text style={styles.stepQty}>{qty}</Text>
           <Pressable testID="product-qty-plus" style={styles.stepBtn} onPress={() => setQty((q) => Math.min(20, q + 1))}>
-            <Ionicons name="add" size={18} color={colors.onBrandPrimary} />
+            <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: colors.onBrandPrimary }} />
           </Pressable>
         </View>
         <Pressable
