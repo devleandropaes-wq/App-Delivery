@@ -1,5 +1,4 @@
 import * as Haptics from "expo-haptics";
-import { useAudioPlayer } from "expo-audio";
 import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { FlatList, Linking, Modal, Pressable, ScrollView, Text, View } from "react-native";
@@ -32,8 +31,7 @@ export default function AdminOrders() {
     enabled: !!token,
   });
 
-  // Alerta sonoro + haptico quando um pedido novo chega
-  const player = useAudioPlayer(require("../../../assets/sounds/new-order.wav"));
+  // Alerta háptico quando um pedido novo chega
   const seenRef = useRef<Set<string> | null>(null);
 
   useEffect(() => {
@@ -46,15 +44,9 @@ export default function AdminOrders() {
     const fresh = orders.data.filter((o) => o.status === "pendente" && !seenRef.current!.has(o.code));
     seenRef.current = codes;
     if (fresh.length > 0) {
-      (async () => {
-        try {
-          await player.seekTo(0);
-          await player.play();
-        } catch {}
-        Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
-      })();
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     }
-  }, [orders.data, player]);
+  }, [orders.data]);
 
   const updateStatus = useMutation({
     mutationFn: ({ id, status }: { id: string; status: OrderStatus }) =>
