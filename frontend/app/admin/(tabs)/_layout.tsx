@@ -1,4 +1,3 @@
-import { Ionicons } from "@expo/vector-icons";
 import { NativeTabs } from "expo-router/unstable-native-tabs";
 import { Tabs, useRouter } from "expo-router";
 import { useEffect } from "react";
@@ -62,7 +61,7 @@ export default function AdminTabsLayout() {
         name="estoque"
         options={{
           title: "Estoque",
-          tabBarIcon: ({ color, size }) => <Ionicons name="cube-outline" size={size} color={color} />,
+          tabBarIcon: ({ color }) => <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: color }} />,
         }}
       />
     </Tabs>
