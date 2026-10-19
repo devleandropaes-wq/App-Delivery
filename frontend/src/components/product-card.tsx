@@ -1,4 +1,3 @@
-import { Ionicons } from "@react-native-vector-icons/ionicons";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { memo } from "react";
@@ -34,7 +33,7 @@ export const ProductCard = memo(function ProductCard({ product }: { product: Pro
           <Image source={{ uri: image }} style={styles.image} contentFit="cover" transition={150} />
         ) : (
           <View style={[styles.image, styles.imagePlaceholder]}>
-            <Ionicons name="medkit-outline" size={30} color={colors.brandPrimary} />
+            <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: colors.brandPrimary }} />
           </View>
         )}
         {discount > 0 && !soldOut && (
@@ -69,7 +68,7 @@ export const ProductCard = memo(function ProductCard({ product }: { product: Pro
             onPress={() => cart.add(product, 1)}
             hitSlop={8}
           >
-            <Ionicons name="add" size={20} color={soldOut ? colors.muted : colors.onBrandPrimary} />
+            <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: soldOut ? colors.muted : colors.onBrandPrimary }} />
           </Pressable>
         </View>
       </View>
