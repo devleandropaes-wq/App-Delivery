@@ -11,9 +11,10 @@ config.cacheStores = [
   new FileStore({ root: path.join(root, 'cache') }),
 ];
 
-// Mapeamento de segurança para compatibilidade web do expo-asset/react-native-web
+// Redirecionamento correto do AssetRegistry para ambiente Web
 config.resolver.extraNodeModules = {
   ...(config.resolver.extraNodeModules || {}),
+  "react-native/Libraries/Image/AssetRegistry": require.resolve("react-native-web/dist/exports/AssetRegistry"),
 };
 
 // Reduce the number of workers to decrease resource usage
