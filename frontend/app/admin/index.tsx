@@ -1,154 +1,142 @@
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
-import { useEffect, useState } from "react";
-import { Pressable, Text, TextInput, View } from "react-native";
+import { useState, useMemo } from "react";
+import { FlatList, Pressable, Text, TextInput, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useQuery } from "@tanstack/react-query";
 
-import { ADMIN_TOKEN_KEY, apiFetch } from "@/src/api";
-import { useAdminToken } from "@/src/auth/admin";
+import { apiFetch } from "@/src/api";
 import { FONTS } from "@/src/fonts";
-import { storage } from "@/src/utils/storage";
+import { fmtBRL } from "@/src/format";
+import { useCart } from "@/src/cart"; // Importante para ler os itens do carrinho em tempo real
+import { type Product } from "@/src/types";
 import { makeStyles, useTheme } from "@/src/theme";
 
-export default function AdminLogin() {
+export default function StoreHome() {
   const insets = useSafeAreaInsets();
   const { colors } = useTheme();
   const styles = useStyles();
   const router = useRouter();
-  const { token, ready, setToken } = useAdminToken();
 
-  const [password, setPassword] = useState("");
-  const [show, setShow] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const { items } = useCart();
+  const totalItems = useMemo(() => items.reduce((acc, i) => acc + i.qty, 0), [items]);
 
-  // Já autenticado → vai direto para o painel
-  useEffect(() => {
-    if (ready && token) router.replace("/admin/pedidos");
-  }, [ready, token]);
+  const [search, setSearch] = useState("");
 
-  const submit = async () => {
-    if (loading) return;
-    setError(null);
-    setLoading(true);
-    try {
-      const res = await apiFetch<{ token: string }>("/admin/login", {
-        method: "POST",
-        body: { password },
-      });
-      await storage.secureSet(ADMIN_TOKEN_KEY, res.token);
-      setToken(res.token);
-      router.replace("/admin/pedidos");
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Não foi possível entrar");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const products = useQuery({
+    queryKey: ["store-products"],
+    queryFn: () => apiFetch<Product[]>("/products"),
+  });
+
+  const filtered = useMemo(() => {
+    if (!products.data) return [];
+    if (!search.trim()) return products.data;
+    const q = search.toLowerCase();
+    return products.data.filter((p) => p.name.toLowerCase().includes(q) || p.category.toLowerCase().includes(q));
+  }, [products.data, search]);
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <View style={styles.card}>
-        <Image source={require("../../assets/images/brand/logo.png")} style={styles.logo} contentFit="contain" />
-        <Text style={styles.title}>Painel da Farmácia</Text>
-        <Text style={styles.subtitle}>Acesso restrito ao dono e funcionários</Text>
-
-        <View style={styles.inputWrap}>
-          <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: colors.muted }} />
-          <TextInput
-            testID="admin-login-input"
-            style={styles.input}
-            placeholder="Senha de acesso"
-            placeholderTextColor={colors.muted}
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry={!show}
-            autoCapitalize="none"
-            autoCorrect={false}
-            onSubmitEditing={submit}
-          />
-          <Pressable testID="admin-login-visibility" onPress={() => setShow((s) => !s)} hitSlop={8}>
-            <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: colors.muted }} />
-          </Pressable>
+      {/* Cabeçalho com o nome e o Botão do Carrinho em tempo real */}
+      <View style={styles.header}>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.headerTitle}>A Sua Drogaria</Text>
+          <Text style={styles.headerSubtitle}>Entrega rápida em Duque de Caxias, RJ</Text>
         </View>
 
-        {error && (
-          <View testID="admin-login-error" style={styles.errorBox}>
-            <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.onError }} />
-            <Text style={styles.errorText}>{error}</Text>
-          </View>
-        )}
-
-        <Pressable
-          testID="admin-login-submit"
-          style={({ pressed }) => [styles.submitBtn, pressed && { opacity: 0.85 }]}
-          onPress={submit}
-          disabled={loading}
+        <Pressable 
+          testID="header-cart-button" 
+          style={({ pressed }) => [styles.cartButton, pressed && { opacity: 0.85 }]} 
+          onPress={() => router.push("/carrinho")}
         >
-          <Text style={styles.submitText}>{loading ? "Validando credenciais..." : "Entrar no painel"}</Text>
-        </Pressable>
-
-        <Pressable testID="admin-login-back-home" onPress={() => router.replace("/")} style={styles.backLink}>
-          <Text style={styles.backLinkText}>← Voltar para a loja</Text>
+          <View style={styles.cartDot} />
+          <Text style={styles.cartButtonText}>Carrinho</Text>
+          {totalItems > 0 && (
+            <View style={styles.cartBadge}>
+              <Text style={styles.cartBadgeText}>{totalItems}</Text>
+            </View>
+          )}
         </Pressable>
       </View>
-      <Text style={styles.footerText}>A Sua Drogaria • Duque de Caxias, RJ</Text>
+
+      {/* Barra de Pesquisa */}
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Pesquisar remédios, perfumaria..."
+          placeholderTextColor={colors.muted}
+          value={search}
+          onChangeText={setSearch}
+          autoCapitalize="none"
+          autoCorrect={false}
+        />
+      </View>
+
+      {/* Lista de Produtos */}
+      <FlatList
+        data={filtered}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={{ padding: 16, gap: 12 }}
+        renderItem={({ item }) => (
+          <Pressable 
+            style={styles.productCard}
+            onPress={() => router.push(`/produto/${item.id}`)}
+          >
+            <Image source={{ uri: item.image_url }} style={styles.productImage} contentFit="cover" />
+            <View style={{ flex: 1, gap: 4 }}>
+              <Text style={styles.productName} numberOfLines={2}>{item.name}</Text>
+              <Text style={styles.productPrice}>{fmtBRL(item.price)}</Text>
+            </View>
+          </Pressable>
+        )}
+      />
     </View>
   );
 }
 
 const useStyles = makeStyles((colors) => ({
-  container: { flex: 1, backgroundColor: colors.brand, alignItems: "center", justifyContent: "center", padding: 24 },
-  card: {
-    width: "100%",
-    backgroundColor: colors.surfaceSecondary,
-    borderRadius: 20,
-    padding: 24,
-    alignItems: "center",
-    gap: 10,
-    shadowColor: colors.surfaceInverse,
-    shadowOpacity: 0.3,
-    shadowRadius: 20,
-    shadowOffset: { width: 0, height: 10 },
-    elevation: 12,
-  },
-  logo: { width: 84, height: 84, borderRadius: 20 },
-  title: { fontSize: 20, color: colors.onSurface, fontFamily: FONTS.extraBold, marginTop: 6 },
-  subtitle: { fontSize: 13, color: colors.onSurfaceTertiary, fontFamily: FONTS.medium, marginBottom: 8 },
-  inputWrap: {
-    width: "100%",
+  container: { flex: 1, backgroundColor: colors.surface },
+  header: {
+    backgroundColor: colors.brand,
     flexDirection: "row",
     alignItems: "center",
-    gap: 8,
-    backgroundColor: colors.surfaceTertiary,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    height: 48,
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
-  input: { flex: 1, fontSize: 15, color: colors.onSurface, fontFamily: FONTS.regular, paddingVertical: 0 },
-  errorBox: {
-    width: "100%",
-    backgroundColor: colors.error,
-    borderRadius: 10,
+  headerTitle: { color: colors.onBrand, fontSize: 18, fontFamily: FONTS.extraBold },
+  headerSubtitle: { color: colors.onBrand, opacity: 0.8, fontSize: 11, fontFamily: FONTS.medium },
+  cartButton: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
-    padding: 10,
-  },
-  errorText: { color: colors.onError, fontSize: 13, fontFamily: FONTS.semiBold, flexShrink: 1 },
-  submitBtn: {
-    width: "100%",
-    height: 50,
-    borderRadius: 12,
     backgroundColor: colors.brandSecondary,
+    paddingHorizontal: 12,
+    height: 38,
+    borderRadius: 10,
+    position: "relative",
+  },
+  cartDot: { width: 6, height: 6, borderRadius: 3, backgroundColor: colors.onBrandSecondary },
+  cartButtonText: { color: colors.onBrandSecondary, fontSize: 13, fontFamily: FONTS.bold },
+  cartBadge: {
+    position: "absolute",
+    top: -5,
+    right: -5,
+    backgroundColor: colors.error,
+    borderRadius: 10,
+    minWidth: 18,
+    height: 18,
     alignItems: "center",
     justifyContent: "center",
-    marginTop: 4,
+    paddingHorizontal: 4,
+    borderWidth: 1.5,
+    borderColor: colors.brand,
   },
-  submitText: { color: colors.onBrandSecondary, fontSize: 15, fontFamily: FONTS.extraBold },
-  backLink: { height: 44, alignItems: "center", justifyContent: "center", paddingHorizontal: 12 },
-  backLinkText: { color: colors.brandPrimary, fontSize: 13, fontFamily: FONTS.semiBold },
-  footerText: { color: colors.onBrand, opacity: 0.7, fontSize: 12, fontFamily: FONTS.medium, marginTop: 24 },
+  cartBadgeText: { color: colors.onError, fontSize: 9, fontFamily: FONTS.extraBold },
+  searchContainer: { padding: 16, backgroundColor: colors.surfaceSecondary, borderBottomWidth: 1, borderBottomColor: colors.border },
+  searchInput: { backgroundColor: colors.surface, borderRadius: 10, paddingHorizontal: 12, height: 40, fontSize: 14, color: colors.onSurface, fontFamily: FONTS.regular, borderWidth: 1, borderColor: colors.border },
+  productCard: { flexDirection: "row", backgroundColor: colors.surfaceSecondary, borderRadius: 12, padding: 10, gap: 12, alignItems: "center", borderWidth: 1, borderColor: colors.border },
+  productImage: { width: 60, height: 60, borderRadius: 8, backgroundColor: colors.surfaceTertiary },
+  productName: { color: colors.onSurface, fontSize: 14, fontFamily: FONTS.semiBold },
+  productPrice: { color: colors.brandSecondary, fontSize: 15, fontFamily: FONTS.extraBold },
 }));
