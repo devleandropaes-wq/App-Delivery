@@ -6,6 +6,10 @@
       "destination": "https://app-delivery-backend.onrender.com/api/$1"
     },
     {
+      "source": "/admin",
+      "destination": "/admin/"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
