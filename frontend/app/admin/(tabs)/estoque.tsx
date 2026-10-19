@@ -228,7 +228,7 @@ export default function AdminStock() {
           <Text style={styles.headerSub}>{products.data?.length ?? 0} produtos no catálogo</Text>
         </View>
         <Pressable testID="admin-logout-estoque" style={styles.logoutBtn} onPress={handleLogout} hitSlop={8}>
-          <Ionicons name="log-out-outline" size={22} color={colors.onBrandPrimary} />
+          <View style={{ width: 14, height: 14, borderRadius: 3, backgroundColor: colors.onBrandPrimary }} />
         </Pressable>
       </View>
 
@@ -252,7 +252,7 @@ export default function AdminStock() {
               {importing ? (
                 <ActivityIndicator size="small" color={colors.onBrandSecondary} />
               ) : (
-                <Ionicons name="cloud-upload-outline" size={18} color={colors.onBrandSecondary} />
+                <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: colors.onBrandSecondary }} />
               )}
               <Text style={styles.importBtnText}>
                 {importing ? "Importando planilha..." : "Importar Planilha do Sistema (Excel/CSV)"}
@@ -272,14 +272,14 @@ export default function AdminStock() {
                   )}
                 </View>
                 <Pressable testID="estoque-import-banner-close" onPress={() => setImportBanner(null)} hitSlop={8}>
-                  <Ionicons name="close" size={16} color={importBanner.error ? colors.onError : colors.onSuccess} />
+                  <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: importBanner.error ? colors.onError : colors.onSuccess }} />
                 </Pressable>
               </View>
             )}
 
             <View style={{ flexDirection: "row", gap: 10 }}>
               <View style={styles.searchWrap}>
-                <Ionicons name="search-outline" size={16} color={colors.muted} />
+                <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: colors.muted }} />
                 <TextInput
                   testID="estoque-search-input"
                   style={styles.searchInput}
@@ -290,7 +290,7 @@ export default function AdminStock() {
                 />
               </View>
               <Pressable testID="estoque-new-product" style={styles.newBtn} onPress={() => openForm()}>
-                <Ionicons name="add" size={20} color={colors.onBrandPrimary} />
+                <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: colors.onBrandPrimary }} />
               </Pressable>
             </View>
           </View>
@@ -301,7 +301,7 @@ export default function AdminStock() {
               <Image source={{ uri: resolveImageUrl(item.image_url) ?? "" }} style={styles.rowImage} contentFit="cover" />
             ) : (
               <View style={[styles.rowImage, styles.rowImagePlaceholder]}>
-                <Ionicons name="medkit-outline" size={18} color={colors.brandPrimary} />
+                <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: colors.brandPrimary }} />
               </View>
             )}
             <View style={styles.rowInfo}>
@@ -324,7 +324,7 @@ export default function AdminStock() {
                 </View>
               </View>
             </View>
-            <Ionicons name="create-outline" size={20} color={colors.muted} />
+            <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: colors.muted }} />
           </Pressable>
         )}
         ListEmptyComponent={
@@ -335,7 +335,7 @@ export default function AdminStock() {
             </View>
           ) : (
             <View style={styles.stateBox}>
-              <Ionicons name="cube-outline" size={28} color={colors.muted} />
+              <View style={{ width: 18, height: 18, borderRadius: 9, backgroundColor: colors.muted }} />
               <Text style={styles.stateText}>Nenhum produto cadastrado no estoque.</Text>
             </View>
           )
@@ -349,7 +349,7 @@ export default function AdminStock() {
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>{editingId ? "Editar produto" : "Novo produto"}</Text>
               <Pressable testID="product-form-close" style={styles.modalClose} onPress={closeForm} hitSlop={8}>
-                <Ionicons name="close" size={20} color={colors.onSurfaceSecondary} />
+                <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.onSurfaceSecondary }} />
               </Pressable>
             </View>
 
@@ -360,7 +360,7 @@ export default function AdminStock() {
                   <Image source={{ uri: resolveImageUrl(form.image_url) ?? "" }} style={styles.photoPreview} contentFit="cover" />
                 ) : (
                   <View style={[styles.photoPreview, styles.photoPlaceholder]}>
-                    <Ionicons name="image-outline" size={26} color={colors.muted} />
+                    <View style={{ width: 18, height: 18, borderRadius: 9, backgroundColor: colors.muted }} />
                   </View>
                 )}
                 <View style={{ flex: 1, gap: 8 }}>
@@ -369,7 +369,7 @@ export default function AdminStock() {
                       <ActivityIndicator size="small" color={colors.onBrandPrimary} />
                     ) : (
                       <>
-                        <Ionicons name="camera-outline" size={16} color={colors.onBrandPrimary} />
+                        <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: colors.onBrandPrimary }} />
                         <Text style={styles.photoBtnText}>{uploadingPhoto ? "Enviando foto..." : "Escolher foto da galeria"}</Text>
                       </>
                     )}
@@ -480,7 +480,7 @@ export default function AdminStock() {
 
               {formError && (
                 <View testID="product-form-error" style={styles.errorBox}>
-                  <Ionicons name="alert-circle" size={15} color={colors.onError} />
+                  <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.onError }} />
                   <Text style={styles.errorText}>{formError}</Text>
                 </View>
               )}
@@ -526,7 +526,6 @@ export default function AdminStock() {
 }
 
 function usesNativeTabsFallback(_insets: { bottom: number }): boolean {
-  // Placeholder para manter clareza: no web/JS Tabs a barra fica fora da viewport.
   return false;
 }
 
