@@ -1,4 +1,3 @@
-import { Ionicons } from "@react-native-vector-icons/ionicons";
 import { Image } from "expo-image";
 import * as Clipboard from "expo-clipboard";
 import { useLocalSearchParams, useRouter } from "expo-router";
@@ -39,7 +38,7 @@ export default function OrderConfirmation() {
   if (order.isLoading) {
     return (
       <View style={[styles.container, styles.center]}>
-        <Ionicons name="sync" size={26} color={colors.brandPrimary} />
+        <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: colors.brandPrimary }} />
         <Text style={styles.stateText}>Confirmando seu pedido...</Text>
       </View>
     );
@@ -48,7 +47,7 @@ export default function OrderConfirmation() {
   if (order.isError || !order.data) {
     return (
       <View style={[styles.container, styles.center]}>
-        <Ionicons name="cloud-offline-outline" size={26} color={colors.error} />
+        <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: colors.error }} />
         <Text style={styles.stateText}>Não foi possível localizar o pedido #{code}.</Text>
         <Pressable testID="order-confirm-home-button" style={styles.secondaryBtn} onPress={() => router.replace("/")}>
           <Text style={styles.secondaryBtnText}>Voltar ao início</Text>
@@ -75,7 +74,7 @@ export default function OrderConfirmation() {
 
       <ScrollView contentContainerStyle={{ padding: 16, paddingBottom: insets.bottom + 40, gap: 14 }}>
         <View style={styles.successBox}>
-          <Ionicons name="checkmark-circle" size={52} color={colors.success} />
+          <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: colors.success }} />
           <Text style={styles.successTitle}>Pedido confirmado!</Text>
           <Text style={styles.successText}>A farmácia já recebeu seu pedido e vai prepará-lo. Acompanhe pelo resumo abaixo.</Text>
           <StatusBadge status={o.status} />
@@ -84,7 +83,7 @@ export default function OrderConfirmation() {
         {isPix && (
           <View testID="pix-info-card" style={styles.card}>
             <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-              <Ionicons name="qr-code-outline" size={20} color={colors.brandSecondary} />
+              <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: colors.brandSecondary }} />
               <Text style={styles.cardTitle}>Pague com Pix para finalizar</Text>
             </View>
             <Text style={styles.pixText}>
@@ -95,7 +94,7 @@ export default function OrderConfirmation() {
                 {pixKey || "Chave Pix não configurada — pague na entrega ou fale com a farmácia."}
               </Text>
               <Pressable testID="pix-copy-button" style={styles.copyBtn} onPress={copyPix}>
-                <Ionicons name={copied ? "checkmark" : "copy-outline"} size={15} color={colors.onBrandPrimary} />
+                <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.onBrandPrimary }} />
                 <Text style={styles.copyBtnText}>{copied ? "Copiada" : "Copiar"}</Text>
               </Pressable>
             </View>
@@ -132,18 +131,18 @@ export default function OrderConfirmation() {
           <View style={styles.divider} />
           <View style={{ gap: 6 }}>
             <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
-              <Ionicons name="cash-outline" size={15} color={colors.brandSecondary} />
+              <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.brandSecondary }} />
               <Text style={styles.metaText}>{PAYMENT_LABELS[o.payment_method]}</Text>
             </View>
             <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
-              <Ionicons name="location-outline" size={15} color={colors.brandSecondary} />
+              <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.brandSecondary }} />
               <Text style={styles.metaText}>
                 {o.address} — {o.neighborhood}
                 {o.complement ? ` (${o.complement})` : ""}
               </Text>
             </View>
             <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
-              <Ionicons name="time-outline" size={15} color={colors.brandSecondary} />
+              <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.brandSecondary }} />
               <Text style={styles.metaText}>Feito em {fmtDateTime(o.created_at)}</Text>
             </View>
           </View>
@@ -160,7 +159,7 @@ export default function OrderConfirmation() {
           style={({ pressed }) => [styles.whatsBtn, pressed && { opacity: 0.85 }]}
           onPress={() => Linking.openURL(`https://wa.me/55${(config.data?.phone ?? "21979216950").replace(/\D/g, "")}?text=${encodeURIComponent(whatsMsg)}`)}
         >
-          <Ionicons name="logo-whatsapp" size={18} color={colors.onSuccess} />
+          <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: colors.onSuccess }} />
           <Text style={styles.whatsBtnText}>{isPix ? "Enviar comprovante no WhatsApp" : "Falar com a farmácia"}</Text>
         </Pressable>
         <Pressable
