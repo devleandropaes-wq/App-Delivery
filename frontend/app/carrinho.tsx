@@ -1,4 +1,3 @@
-import { Ionicons } from "@react-native-vector-icons/ionicons";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -107,13 +106,13 @@ export default function CartCheckout() {
       <View style={styles.container}>
         <View style={styles.header}>
           <Pressable testID="cart-back-button" style={styles.backBtn} onPress={() => router.back()} hitSlop={8}>
-            <Ionicons name="chevron-back" size={22} color={colors.onBrandPrimary} />
+            <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: colors.onBrandPrimary }} />
           </Pressable>
           <Text style={styles.headerTitle}>Carrinho</Text>
           <View style={{ width: 36 }} />
         </View>
         <View style={[styles.center, { paddingBottom: insets.bottom + 60 }]}>
-          <Ionicons name="cart-outline" size={44} color={colors.borderStrong} />
+          <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.borderStrong }} />
           <Text style={styles.emptyTitle}>Seu carrinho está vazio</Text>
           <Text style={styles.emptyText}>Adicione itens da vitrine para prosseguir.</Text>
           <Pressable testID="cart-go-home" style={styles.homeBtn} onPress={() => router.replace("/")}>
@@ -128,7 +127,7 @@ export default function CartCheckout() {
     <View style={styles.container}>
       <View style={styles.header}>
         <Pressable testID="cart-back-button" style={styles.backBtn} onPress={() => router.back()} hitSlop={8}>
-          <Ionicons name="chevron-back" size={22} color={colors.onBrandPrimary} />
+          <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: colors.onBrandPrimary }} />
         </Pressable>
         <Text style={styles.headerTitle}>Finalizar pedido</Text>
         <View style={{ width: 36 }} />
@@ -144,7 +143,7 @@ export default function CartCheckout() {
                 <Image source={{ uri: resolveImageUrl(item.image_url) ?? "" }} style={styles.itemImage} contentFit="cover" />
               ) : (
                 <View style={[styles.itemImage, styles.itemImagePlaceholder]}>
-                  <Ionicons name="medkit-outline" size={18} color={colors.brandPrimary} />
+                  <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: colors.brandPrimary }} />
                 </View>
               )}
               <View style={styles.itemInfo}>
@@ -160,7 +159,7 @@ export default function CartCheckout() {
                     style={styles.itemStepBtn}
                     onPress={() => cart.setQty(item.product_id, item.qty - 1)}
                   >
-                    <Ionicons name="remove" size={14} color={colors.onBrandPrimary} />
+                    <View style={{ width: 10, height: 3, borderRadius: 1.5, backgroundColor: colors.onBrandPrimary }} />
                   </Pressable>
                   <Text style={styles.itemStepQty}>{item.qty}</Text>
                   <Pressable
@@ -168,7 +167,7 @@ export default function CartCheckout() {
                     style={styles.itemStepBtn}
                     onPress={() => cart.setQty(item.product_id, item.qty + 1)}
                   >
-                    <Ionicons name="add" size={14} color={colors.onBrandPrimary} />
+                    <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.onBrandPrimary }} />
                   </Pressable>
                 </View>
                 <Pressable
@@ -177,7 +176,7 @@ export default function CartCheckout() {
                   hitSlop={8}
                   onPress={() => cart.remove(item.product_id)}
                 >
-                  <Ionicons name="trash-outline" size={18} color={colors.error} />
+                  <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: colors.error }} />
                 </Pressable>
               </View>
             </View>
@@ -253,17 +252,13 @@ export default function CartCheckout() {
                 onPress={() => setPayment(opt.key)}
               >
                 <View style={[styles.paymentIcon, active && { backgroundColor: colors.brandSecondary }]}>
-                  <Ionicons name={opt.icon as any} size={20} color={active ? colors.onBrandSecondary : colors.brandPrimary} />
+                  <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: active ? colors.onBrandSecondary : colors.brandPrimary }} />
                 </View>
                 <View style={{ flex: 1, flexShrink: 1 }}>
                   <Text style={styles.paymentLabel}>{opt.label}</Text>
                   <Text style={styles.paymentDesc}>{opt.desc}</Text>
                 </View>
-                <Ionicons
-                  name={active ? "checkmark-circle" : "ellipse-outline"}
-                  size={22}
-                  color={active ? colors.brandSecondary : colors.borderStrong}
-                />
+                <View style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: active ? colors.brandSecondary : colors.borderStrong }} />
               </Pressable>
             );
           })}
@@ -289,7 +284,7 @@ export default function CartCheckout() {
 
       {formError && (
         <View testID="checkout-error" style={styles.errorBox}>
-          <Ionicons name="alert-circle" size={16} color={colors.onError} />
+          <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: colors.onError }} />
           <Text style={styles.errorText}>{formError}</Text>
         </View>
       )}
