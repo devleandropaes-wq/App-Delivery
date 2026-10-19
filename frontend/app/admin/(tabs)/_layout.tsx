@@ -55,7 +55,7 @@ export default function AdminTabsLayout() {
         name="pedidos"
         options={{
           title: "Pedidos",
-          tabBarIcon: ({ color, size }) => <Ionicons name="receipt-outline" size={size} color={color} />,
+          tabBarIcon: ({ color }) => <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: color }} />,
         }}
       />
       <Tabs.Screen
