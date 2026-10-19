@@ -49,7 +49,7 @@ STORE_PHONE = os.environ.get("STORE_PHONE", "21 97921-6950")
 STORE_CITY = os.environ.get("STORE_CITY", "Duque de Caxias, RJ")
 DELIVERY_FEE = float(os.environ.get("DELIVERY_FEE", "0"))
 
-VALID_STATUSES = ["pendente", "em_separacao", "saiu_entrega", "finalizado"]
+VALID_STATUSES = ["pendente", "em_separacao", "saiu_entrega", "finalizado", "cancelado"]
 VALID_PAYMENTS = ["pix", "dinheiro", "cartao"]
 
 # ---------------------------------------------------------------------------
@@ -619,14 +619,31 @@ async def admin_list_orders(_: None = Depends(require_admin)):
 async def admin_update_status(order_id: str, payload: StatusUpdate, _: None = Depends(require_admin)):
     if payload.status not in VALID_STATUSES:
         raise HTTPException(status_code=400, detail="Status inválido")
+    
     try:
-        result = await db.orders.update_one(
-            {"_id": ObjectId(order_id)}, {"$set": {"status": payload.status, "updated_at": datetime.now(timezone.utc)}}
-        )
+        order_doc = await db.orders.find_one({"_id": ObjectId(order_id)})
     except Exception:
         raise HTTPException(status_code=404, detail="Pedido não encontrado")
-    if result.matched_count == 0:
+        
+    if not order_doc:
         raise HTTPException(status_code=404, detail="Pedido não encontrado")
+        
+    old_status = order_doc.get("status")
+    new_status = payload.status
+    
+    # Se o pedido foi cancelado agora e antes não estava cancelado, devolve o stock automaticamente
+    if new_status == "cancelado" and old_status != "cancelado":
+        for item in order_doc.get("items", []):
+            await db.products.update_one(
+                {"_id": ObjectId(item["product_id"])},
+                {"$inc": {"stock": item["qty"]}, "$set": {"updated_at": datetime.now(timezone.utc)}}
+            )
+
+    result = await db.orders.update_one(
+        {"_id": ObjectId(order_id)},
+        {"$set": {"status": new_status, "updated_at": datetime.now(timezone.utc)}}
+    )
+    
     doc = await db.orders.find_one({"_id": ObjectId(order_id)})
     return Order.from_mongo(doc).model_dump()
 
