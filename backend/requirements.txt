@@ -16,3 +16,4 @@ protobuf
 grpcio
 grpcio-status
 pyjwt
+openpyxl
