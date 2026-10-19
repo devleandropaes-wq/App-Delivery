@@ -1,4 +1,3 @@
-import { Ionicons } from "@react-native-vector-icons/ionicons";
 import * as DocumentPicker from "expo-document-picker";
 import * as ImagePicker from "expo-image-picker";
 import { Image } from "expo-image";
