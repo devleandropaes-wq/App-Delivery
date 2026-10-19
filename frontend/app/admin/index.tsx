@@ -1,4 +1,3 @@
-import { Ionicons } from "@react-native-vector-icons/ionicons";
 import { Image } from "expo-image";
 import { useRouter } from "expo-router";
 import { useEffect, useState } from "react";
@@ -55,7 +54,7 @@ export default function AdminLogin() {
         <Text style={styles.subtitle}>Acesso restrito ao dono e funcionários</Text>
 
         <View style={styles.inputWrap}>
-          <Ionicons name="lock-closed-outline" size={18} color={colors.muted} />
+          <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: colors.muted }} />
           <TextInput
             testID="admin-login-input"
             style={styles.input}
@@ -69,13 +68,13 @@ export default function AdminLogin() {
             onSubmitEditing={submit}
           />
           <Pressable testID="admin-login-visibility" onPress={() => setShow((s) => !s)} hitSlop={8}>
-            <Ionicons name={show ? "eye-off-outline" : "eye-outline"} size={20} color={colors.muted} />
+            <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: colors.muted }} />
           </Pressable>
         </View>
 
         {error && (
           <View testID="admin-login-error" style={styles.errorBox}>
-            <Ionicons name="alert-circle" size={15} color={colors.onError} />
+            <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.onError }} />
             <Text style={styles.errorText}>{error}</Text>
           </View>
         )}
