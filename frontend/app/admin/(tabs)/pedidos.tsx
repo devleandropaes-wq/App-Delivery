@@ -79,8 +79,12 @@ export default function AdminOrders() {
             <Text style={styles.liveText}>Atualizando em tempo real</Text>
           </View>
         </View>
-        <Pressable testID="admin-logout" style={styles.logoutBtn} onPress={handleLogout} hitSlop={8}>
-          <View style={{ width: 14, height: 14, borderRadius: 3, backgroundColor: colors.onBrandPrimary }} />
+        <Pressable 
+          testID="admin-logout" 
+          style={({ pressed }) => [styles.logoutBtnTextWrap, pressed && { opacity: 0.7 }]} 
+          onPress={handleLogout}
+        >
+          <Text style={styles.logoutTextCustom}>Sair</Text>
         </Pressable>
       </View>
 
@@ -235,6 +239,17 @@ export default function AdminOrders() {
               </ScrollView>
 
               <View style={styles.modalFooter}>
+                {selected.status !== "cancelado" && selected.status !== "finalizado" && (
+                  <Pressable
+                    testID="order-cancel-button"
+                    style={({ pressed }) => [styles.footerBtnCancel, pressed && { opacity: 0.85 }]}
+                    onPress={() => updateStatus.mutate({ id: selected.id, status: "cancelado" as any })}
+                    disabled={updateStatus.isPending}
+                  >
+                    <Text style={styles.footerBtnCancelText}>Cancelar Pedido</Text>
+                  </Pressable>
+                )}
+
                 {prevStatus(selected.status) && (
                   <Pressable
                     testID="order-back-status-button"
@@ -244,9 +259,10 @@ export default function AdminOrders() {
                     }
                     disabled={updateStatus.isPending}
                   >
-                    <Text style={styles.footerBtnSecondaryText}>Voltar para {STATUS_META[prevStatus(selected.status) as OrderStatus].label}</Text>
+                    <Text style={styles.footerBtnSecondaryText}>Voltar</Text>
                   </Pressable>
                 )}
+
                 {nextStatus(selected.status) ? (
                   <Pressable
                     testID="order-advance-button"
@@ -256,12 +272,12 @@ export default function AdminOrders() {
                     }
                     disabled={updateStatus.isPending}
                   >
-                    <Text style={styles.footerBtnPrimaryText}>Avançar para {STATUS_META[nextStatus(selected.status) as OrderStatus].label}</Text>
+                    <Text style={styles.footerBtnPrimaryText}>Avançar</Text>
                   </Pressable>
                 ) : (
                   <View style={styles.finalizedBox}>
                     <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.success }} />
-                    <Text style={styles.finalizedText}>Pedido finalizado</Text>
+                    <Text style={styles.finalizedText}>Finalizado</Text>
                   </View>
                 )}
               </View>
@@ -288,7 +304,21 @@ const useStyles = makeStyles((colors) => ({
   liveRow: { flexDirection: "row", alignItems: "center", gap: 6, marginTop: 2 },
   liveDot: { width: 7, height: 7, borderRadius: 4, backgroundColor: colors.success },
   liveText: { color: colors.onBrand, opacity: 0.85, fontSize: 12, fontFamily: FONTS.medium },
-  logoutBtn: { width: 40, height: 40, alignItems: "center", justifyContent: "center", borderRadius: 12, backgroundColor: "rgba(255,255,255,0.12)" },
+  logoutBtnTextWrap: {
+    paddingHorizontal: 14,
+    height: 36,
+    borderRadius: 8,
+    backgroundColor: "rgba(255, 255, 255, 0.18)",
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    borderColor: "rgba(255, 255, 255, 0.25)",
+  },
+  logoutTextCustom: {
+    color: colors.onBrand,
+    fontSize: 13,
+    fontFamily: FONTS.bold,
+  },
   stateBox: { flex: 1, alignItems: "center", justifyContent: "center", gap: 10, padding: 40 },
   stateText: { color: colors.onSurfaceTertiary, fontSize: 14, textAlign: "center", fontFamily: FONTS.medium },
   retryBtn: { backgroundColor: colors.brandPrimary, borderRadius: 12, paddingHorizontal: 20, height: 44, alignItems: "center", justifyContent: "center" },
@@ -399,6 +429,21 @@ const useStyles = makeStyles((colors) => ({
     paddingHorizontal: 8,
   },
   footerBtnSecondaryText: { color: colors.onBrandTertiary, fontSize: 13, fontFamily: FONTS.bold, textAlign: "center" },
+  footerBtnCancel: {
+    flex: 1,
+    height: 48,
+    borderRadius: 12,
+    backgroundColor: colors.error,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 8,
+  },
+  footerBtnCancelText: {
+    color: colors.onError,
+    fontSize: 13,
+    fontFamily: FONTS.bold,
+    textAlign: "center",
+  },
   finalizedBox: { flex: 1, flexDirection: "row", height: 48, borderRadius: 12, backgroundColor: colors.surfaceTertiary, alignItems: "center", justifyContent: "center", gap: 6 },
   finalizedText: { color: colors.success, fontSize: 14, fontFamily: FONTS.bold },
 }));
