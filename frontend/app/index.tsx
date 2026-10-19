@@ -72,7 +72,7 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
-      {/* Cabeçalho fixo: marca + telefone + busca + categorias */}
+      {/* Cabeçalho fixo: marca + telefone + botão de carrinho no topo + busca + categorias */}
       <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
         <View style={styles.headerTop}>
           <Image source={require("../assets/images/brand/logo.png")} style={styles.logo} contentFit="contain" />
@@ -82,9 +82,20 @@ export default function Home() {
               {config.data ? `Delivery em ${config.data.city}` : "Delivery em Duque de Caxias, RJ"}
             </Text>
           </View>
-          <PressableV testID="header-phone" style={styles.phonePill} onPress={callStore}>
+          
+          {/* Botão de Carrinho no Topo com contador em tempo real */}
+          <PressableV
+            testID="header-cart-button"
+            style={styles.headerCartPill}
+            onPress={() => router.push("/carrinho")}
+          >
             <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.onBrandPrimary }} />
-            <Text style={styles.phoneText}>21 97921-6950</Text>
+            <Text style={styles.headerCartText}>Carrinho</Text>
+            {cart.count > 0 && (
+              <View style={styles.headerBadge}>
+                <Text style={styles.headerBadgeText}>{cart.count}</Text>
+              </View>
+            )}
           </PressableV>
         </View>
 
@@ -191,7 +202,7 @@ export default function Home() {
         />
       )}
 
-      {/* Carrinho sempre visível */}
+      {/* Carrinho flutuante */}
       {cart.count > 0 && (
         <PressableV
           testID="cart-fab"
@@ -256,19 +267,39 @@ const useStyles = makeStyles((colors) => ({
     fontSize: 12,
     fontFamily: FONTS.medium,
   },
-  phonePill: {
+  headerCartPill: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,
     backgroundColor: colors.brandSecondary,
     borderRadius: 999,
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
     height: 32,
+    position: "relative",
   },
-  phoneText: {
+  headerCartText: {
     color: colors.onBrandSecondary,
     fontSize: 11,
     fontFamily: FONTS.bold,
+  },
+  headerBadge: {
+    position: "absolute",
+    top: -4,
+    right: -4,
+    backgroundColor: colors.error,
+    borderRadius: 10,
+    minWidth: 18,
+    height: 18,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 4,
+    borderWidth: 1.5,
+    borderColor: colors.brand,
+  },
+  headerBadgeText: {
+    color: colors.onError,
+    fontSize: 9,
+    fontFamily: FONTS.extraBold,
   },
   searchWrap: {
     flexDirection: "row",
