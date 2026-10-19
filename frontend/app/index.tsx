@@ -1,4 +1,3 @@
-import { Ionicons } from "@react-native-vector-icons/ionicons";
 import { Image } from "expo-image";
 import { Linking, Pressable, RefreshControl, ScrollView, SectionList, Text, TextInput, View } from "react-native";
 import { useMemo, useState } from "react";
@@ -84,13 +83,13 @@ export default function Home() {
             </Text>
           </View>
           <PressableV testID="header-phone" style={styles.phonePill} onPress={callStore}>
-            <Ionicons name="call-outline" size={13} color={colors.onBrandPrimary} />
+            <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.onBrandPrimary }} />
             <Text style={styles.phoneText}>21 97921-6950</Text>
           </PressableV>
         </View>
 
         <View style={styles.searchWrap}>
-          <Ionicons name="search-outline" size={18} color={colors.muted} />
+          <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: colors.muted }} />
           <TextInput
             testID="search-input"
             style={styles.searchInput}
@@ -103,7 +102,7 @@ export default function Home() {
           />
           {searchInput.length > 0 && (
             <PressableV testID="search-clear" onPress={() => setSearchInput("")} hitSlop={8}>
-              <Ionicons name="close-circle" size={18} color={colors.borderStrong} />
+              <View style={{ width: 12, height: 12, borderRadius: 6, backgroundColor: colors.borderStrong }} />
             </PressableV>
           )}
         </View>
@@ -134,12 +133,12 @@ export default function Home() {
       {/* Vitrine agrupada por categorias */}
       {products.isLoading ? (
         <View style={styles.stateBox}>
-          <Ionicons name="sync" size={26} color={colors.brandPrimary} />
+          <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: colors.brandPrimary }} />
           <Text style={styles.stateText}>Carregando produtos e ofertas...</Text>
         </View>
       ) : products.isError ? (
         <View style={styles.stateBox}>
-          <Ionicons name="cloud-offline-outline" size={26} color={colors.error} />
+          <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: colors.error }} />
           <Text style={styles.stateText}>Não foi possível carregar o catálogo. Verifique sua conexão.</Text>
           <PressableV testID="catalog-retry" style={styles.retryBtn} onPress={() => products.refetch()}>
             <Text style={styles.retryText}>Tentar novamente</Text>
@@ -181,7 +180,7 @@ export default function Home() {
           }
           ListEmptyComponent={
             <View style={styles.stateBox}>
-              <Ionicons name="search-outline" size={26} color={colors.muted} />
+              <View style={{ width: 16, height: 16, borderRadius: 8, backgroundColor: colors.muted }} />
               <Text style={styles.stateText}>
                 {search
                   ? `Nenhum produto encontrado para “${search}”.`
@@ -200,7 +199,7 @@ export default function Home() {
           onPress={() => router.push("/carrinho")}
         >
           <View style={styles.cartFabIcon}>
-            <Ionicons name="cart" size={18} color={colors.onBrandPrimary} />
+            <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: colors.onBrandPrimary }} />
           </View>
           <View style={{ flexShrink: 1 }}>
             <Text style={styles.cartFabCount}>
@@ -208,7 +207,7 @@ export default function Home() {
             </Text>
             <Text style={styles.cartFabTotal}>{fmtBRL(cart.subtotal)}</Text>
           </View>
-          <Ionicons name="arrow-forward" size={18} color={colors.onBrandPrimary} />
+          <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: colors.onBrandPrimary }} />
         </PressableV>
       )}
     </View>
