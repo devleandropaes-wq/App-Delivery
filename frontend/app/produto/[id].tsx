@@ -62,7 +62,8 @@ export default function ProductDetails() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
+      {/* Cabeçalho com botão de voltar, título e Botão de Carrinho no topo */}
+      <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
         <Pressable
           testID="product-back-button"
           style={({ pressed }) => [styles.backBtn, pressed && { opacity: 0.7 }]}
@@ -71,8 +72,22 @@ export default function ProductDetails() {
         >
           <View style={{ width: 14, height: 14, borderRadius: 7, backgroundColor: colors.onBrandPrimary }} />
         </Pressable>
-        <Text style={styles.headerTitle}>Detalhes do produto</Text>
-        <View style={{ width: 36 }} />
+        <Text style={styles.headerTitle} numberOfLines={1}>Detalhes do produto</Text>
+
+        {/* Botão de Carrinho no Topo em tempo real */}
+        <Pressable
+          testID="header-cart-button"
+          style={styles.headerCartPill}
+          onPress={() => router.push("/carrinho")}
+        >
+          <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: colors.onBrandSecondary }} />
+          <Text style={styles.headerCartText}>Carrinho</Text>
+          {cart.count > 0 && (
+            <View style={styles.headerBadge}>
+              <Text style={styles.headerBadgeText}>{cart.count}</Text>
+            </View>
+          )}
+        </Pressable>
       </View>
 
       <ScrollView contentContainerStyle={{ paddingBottom: insets.bottom + 120 }}>
@@ -147,12 +162,45 @@ const useStyles = makeStyles((colors) => ({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    paddingHorizontal: 12,
-    paddingTop: 56,
-    paddingBottom: 14,
+    paddingHorizontal: 16,
+    paddingBottom: 12,
   },
   backBtn: { width: 36, height: 36, alignItems: "center", justifyContent: "center", borderRadius: 12 },
-  headerTitle: { flex: 1, color: colors.onBrand, fontSize: 16, fontFamily: FONTS.bold, textAlign: "center" },
+  headerTitle: { flex: 1, color: colors.onBrand, fontSize: 16, fontFamily: FONTS.bold },
+  headerCartPill: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    backgroundColor: colors.brandSecondary,
+    borderRadius: 999,
+    paddingHorizontal: 12,
+    height: 32,
+    position: "relative",
+  },
+  headerCartText: {
+    color: colors.onBrandSecondary,
+    fontSize: 11,
+    fontFamily: FONTS.bold,
+  },
+  headerBadge: {
+    position: "absolute",
+    top: -4,
+    right: -4,
+    backgroundColor: colors.error,
+    borderRadius: 10,
+    minWidth: 18,
+    height: 18,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 4,
+    borderWidth: 1.5,
+    borderColor: colors.brand,
+  },
+  headerBadgeText: {
+    color: colors.onError,
+    fontSize: 9,
+    fontFamily: FONTS.extraBold,
+  },
   imageBox: {
     height: 240,
     backgroundColor: colors.surfaceTertiary,
