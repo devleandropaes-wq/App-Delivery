@@ -1,10 +1,10 @@
-import { Ionicons } from "@react-native-vector-icons/ionicons";
 import * as Haptics from "expo-haptics";
 import { useAudioPlayer } from "expo-audio";
 import { useRouter } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { FlatList, Linking, Modal, Pressable, ScrollView, Text, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { apiFetch } from "@/src/api";
 import { adminLogout, useAdminToken } from "@/src/auth/admin";
@@ -14,12 +14,6 @@ import { FONTS } from "@/src/fonts";
 import { buildWhatsAppLink, fmtBRL, fmtShortDateTime } from "@/src/format";
 import { PAYMENT_LABELS, STATUS_ORDER, type Order, type OrderStatus } from "@/src/types";
 import { makeStyles, useTheme } from "@/src/theme";
-
-const PAYMENT_ICONS: Record<string, string> = {
-  pix: "qr-code-outline",
-  dinheiro: "cash-outline",
-  cartao: "card-outline",
-};
 
 export default function AdminOrders() {
   const insets = useSafeAreaInsets();
@@ -94,18 +88,18 @@ export default function AdminOrders() {
           </View>
         </View>
         <Pressable testID="admin-logout" style={styles.logoutBtn} onPress={handleLogout} hitSlop={8}>
-          <Ionicons name="log-out-outline" size={22} color={colors.onBrandPrimary} />
+          <View style={{ width: 14, height: 14, borderRadius: 3, backgroundColor: colors.onBrandPrimary }} />
         </Pressable>
       </View>
 
       {orders.isLoading ? (
         <View style={styles.stateBox}>
-          <Ionicons name="sync" size={26} color={colors.brandPrimary} />
+          <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: colors.brandPrimary }} />
           <Text style={styles.stateText}>Carregando pedidos ativos...</Text>
         </View>
       ) : orders.isError ? (
         <View style={styles.stateBox}>
-          <Ionicons name="cloud-offline-outline" size={26} color={colors.error} />
+          <View style={{ width: 20, height: 20, borderRadius: 10, backgroundColor: colors.error }} />
           <Text style={styles.stateText}>Erro ao sincronizar pedidos em tempo real.</Text>
           <Pressable testID="orders-retry" style={styles.retryBtn} onPress={() => orders.refetch()}>
             <Text style={styles.retryText}>Tentar novamente</Text>
@@ -159,7 +153,7 @@ export default function AdminOrders() {
                         <View style={styles.orderCardRow}>
                           <Text style={styles.orderTotal}>{fmtBRL(order.total)}</Text>
                           <View style={styles.paymentChip}>
-                            <Ionicons name={(PAYMENT_ICONS[order.payment_method] ?? "cash-outline") as any} size={11} color={colors.onSurfaceTertiary} />
+                            <View style={{ width: 8, height: 8, borderRadius: 4, backgroundColor: colors.onSurfaceTertiary }} />
                             <Text style={styles.paymentChipText}>{PAYMENT_LABELS[order.payment_method]}</Text>
                           </View>
                         </View>
@@ -194,7 +188,7 @@ export default function AdminOrders() {
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
                   <StatusBadge status={selected.status} />
                   <Pressable testID="order-modal-close" style={styles.modalClose} onPress={() => setSelectedId(null)} hitSlop={8}>
-                    <Ionicons name="close" size={20} color={colors.onSurfaceSecondary} />
+                    <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.onSurfaceSecondary }} />
                   </Pressable>
                 </View>
               </View>
@@ -204,7 +198,7 @@ export default function AdminOrders() {
                   <Text style={styles.modalCardTitle}>Cliente</Text>
                   <Text style={styles.modalLine}>{selected.customer_name}</Text>
                   <Pressable testID="order-modal-whatsapp" style={styles.phoneRow} onPress={() => openWhats(selected)}>
-                    <Ionicons name="logo-whatsapp" size={14} color={colors.success} />
+                    <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.success }} />
                     <Text style={[styles.modalLine, { color: colors.success }]}>{selected.customer_phone}</Text>
                   </Pressable>
                 </View>
@@ -242,7 +236,7 @@ export default function AdminOrders() {
                     <Text style={styles.totalValue}>{fmtBRL(selected.total)}</Text>
                   </View>
                   <View style={styles.paymentRow}>
-                    <Ionicons name={(PAYMENT_ICONS[selected.payment_method] ?? "cash-outline") as any} size={16} color={colors.brandSecondary} />
+                    <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.brandSecondary }} />
                     <Text style={styles.paymentRowText}>{PAYMENT_LABELS[selected.payment_method]}</Text>
                   </View>
                 </View>
@@ -274,7 +268,7 @@ export default function AdminOrders() {
                   </Pressable>
                 ) : (
                   <View style={styles.finalizedBox}>
-                    <Ionicons name="checkmark-circle" size={20} color={colors.success} />
+                    <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: colors.success }} />
                     <Text style={styles.finalizedText}>Pedido finalizado</Text>
                   </View>
                 )}
