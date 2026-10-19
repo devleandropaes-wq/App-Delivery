@@ -45,8 +45,7 @@
         {
           "photosPermission": "Escolher fotos dos produtos para o catálogo"
         }
-      ],
-      "@react-native-vector-icons/ionicons"
+      ]
     ],
     "experiments": {
       "typedRoutes": true
